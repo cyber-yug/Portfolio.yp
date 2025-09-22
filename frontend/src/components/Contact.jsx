@@ -2,6 +2,22 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 
+// Resolve API base URL safely for both dev and production
+const getApiBase = () => {
+  const env = import.meta.env;
+  // Prefer explicit backend URL if provided
+  const direct = env.VITE_BACKEND_URL || env.VITE_API_URL;
+  if (direct) return direct.replace(/\/$/, '');
+
+  // In production on Vercel, prefer same-origin '/api'
+  if (env.PROD) return '/api';
+
+  // Fallback for local development
+  return 'http://localhost:5001/api';
+};
+
+const API_BASE = getApiBase();
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -52,7 +68,7 @@ const Contact = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/contact`,
+        `${API_BASE}/contact`,
         formData,
         {
           headers: {
