@@ -68,8 +68,12 @@ const Contact = () => {
 
     try {
       const response = await axios.post(
-        `${API_BASE}/contact`,
-        formData,
+        "https://portfolio-8i5nl4sk3-yug-patels-projects-4c4dde5b.vercel.app/api/contact",
+        {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message
+        },
         {
           headers: {
             'Content-Type': 'application/json'
@@ -78,11 +82,14 @@ const Contact = () => {
       );
 
       if (response.data.success) {
+        console.log("Message sent");
+        alert("Message sent successfully!");
         setSubmitStatus('success');
         setFormData({ name: '', email: '', message: '' });
       }
     } catch (error) {
       console.error('Error submitting form:', error);
+      alert("Error submitting form. Please try again.");
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
