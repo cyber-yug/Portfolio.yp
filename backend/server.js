@@ -25,7 +25,7 @@ app.use(limiter);
 
 // CORS configuration - Allow your frontend Vercel deployment
 app.use(cors({
-  origin: true, // Allow all origins temporarily for debugging
+  origin: '*', // Allow all origins temporarily for debugging
   methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
