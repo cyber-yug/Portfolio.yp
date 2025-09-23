@@ -52,6 +52,19 @@ connectDB();
 // Routes
 app.use('/api/contact', contactRoutes);
 
+// Root route - Welcome message
+app.get('/', (req, res) => {
+  res.status(200).json({ 
+    message: 'Portfolio Backend API is running!',
+    status: 'online',
+    endpoints: {
+      health: '/api/health',
+      contact: '/api/contact'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({ 
