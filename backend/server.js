@@ -23,12 +23,18 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// CORS configuration - Allow only your frontend Vercel deployment
+// CORS configuration - Allow your frontend Vercel deployment
 app.use(cors({
-  origin: "https://portfolioyp-psi.vercel.app",
-  methods: ["GET", "POST"],
+  origin: [
+    "https://portfolioyp-psi.vercel.app",
+    "https://portfolio-ly8cy5uxk-yug-patels-projects-4c4dde5b.vercel.app",
+    "https://portfolio-8m64urms0-yug-patels-projects-4c4dde5b.vercel.app"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200
 }));
 
 // Body parsing middleware
