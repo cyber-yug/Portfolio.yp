@@ -23,15 +23,45 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// CORS configuration - Allow your frontend Vercel deployment
-app.use(cors({
-  origin: '*', // Allow all origins temporarily for debugging
-  methods: ["GET", "POST", "OPTIONS"],
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+// CORS configuration with environment-based origin handling
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // In development, allow any origin
+    if (process.env.NODE_ENV === 'development') {
+      return callback(null, true);
+    }
+    
+    // In production, only allow specific domains
+    const allowedOrigins = [
+      'https://portfolioyp-psi.vercel.app',
+      'https://portfolio-ly8cy5uxk-yug-patels-projects-4c4dde5b.vercel.app',
+      'https://portfolio-8m64urms0-yug-patels-projects-4c4dde5b.vercel.app'
+    ];
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'Accept', 
+    'Origin', 
+    'X-Requested-With'
+  ],
+  credentials: true, // Allow cookies/credentials
   preflightContinue: false,
-  optionsSuccessStatus: 200
-}));
+  optionsSuccessStatus: 200 // For legacy browser support
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
@@ -70,14 +100,30 @@ app.get('/', (req, res) => {
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({ 
-    message: 'Portfolio API is running successfully!',
-    timestamp: new Date().toISOString()
+    status: 'healthy',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    cors: {
+      environment: process.env.NODE_ENV || 'development',
+      allowAllOrigins: process.env.NODE_ENV === 'development'
+    }
   });
 });
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('Global error handler:', err.stack);
+  
+  // CORS error
+  if (err.message && err.message.includes('not allowed by CORS')) {
+    return res.status(403).json({
+      success: false,
+      message: 'CORS policy violation',
+      error: err.message
+    });
+  }
+  
+  // Generic error response
   res.status(500).json({ 
     message: 'Something went wrong!', 
     error: process.env.NODE_ENV === 'production' ? {} : err.message 
@@ -92,7 +138,8 @@ app.use('*', (req, res) => {
 app.listen(PORT, async () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`✅ CORS configured for: https://portfolioyp-psi.vercel.app`);
+  console.log(`🔒 CORS: ${process.env.NODE_ENV === 'development' ? 'Allow all origins (DEV)' : 'Restricted origins (PROD)'}`);
+  console.log(`📡 Health check: http://localhost:${PORT}/api/health`);
   
   // Test email connection on startup
   console.log('📧 Testing email connection...');
