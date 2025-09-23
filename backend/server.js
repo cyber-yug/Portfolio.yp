@@ -25,14 +25,10 @@ app.use(limiter);
 
 // CORS configuration - Allow your frontend Vercel deployment
 app.use(cors({
-  origin: [
-    "https://portfolioyp-psi.vercel.app",
-    "https://portfolio-ly8cy5uxk-yug-patels-projects-4c4dde5b.vercel.app",
-    "https://portfolio-8m64urms0-yug-patels-projects-4c4dde5b.vercel.app"
-  ],
+  origin: true, // Allow all origins temporarily for debugging
   methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
   preflightContinue: false,
   optionsSuccessStatus: 200
 }));
