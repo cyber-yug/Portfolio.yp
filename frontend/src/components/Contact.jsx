@@ -312,56 +312,6 @@ const Contact = () => {
                     </a>
                   </div>
                   
-                  {/* Phone */}
-                  <div 
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                      minWidth: '200px',
-                      padding: '1rem',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
-                    <div 
-                      style={{
-                        fontSize: '2rem',
-                        marginBottom: '0.5rem'
-                      }}
-                    >
-                      📱
-                    </div>
-                    <div 
-                      style={{
-                        fontFamily: 'monospace',
-                        fontSize: '0.875rem',
-                        color: '#9ca3af',
-                        marginBottom: '0.25rem',
-                        fontWeight: '500'
-                      }}
-                    >
-                      Phone
-                    </div>
-                    <a 
-                      href="tel:+919558551573"
-                      style={{
-                        color: '#22c55e',
-                        fontSize: '0.875rem',
-                        textDecoration: 'none',
-                        transition: 'color 0.3s ease',
-                        textAlign: 'center'
-                      }}
-                      onMouseEnter={(e) => e.target.style.color = '#86efac'}
-                      onMouseLeave={(e) => e.target.style.color = '#22c55e'}
-                      title="Call me"
-                    >
-                      +91 9558551573
-                    </a>
-                  </div>
-                  
                   {/* Location */}
                   <div 
                     style={{
