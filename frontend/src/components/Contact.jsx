@@ -140,8 +140,9 @@ const Contact = () => {
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
+          <div className="grid lg:grid-cols-1 gap-12">
+            {/* Contact Form - Temporarily Commented Out */}
+            {/* 
             <motion.div variants={itemVariants}>
               <div className="cyber-card p-8">
                 <h3 className="text-2xl font-tech font-bold text-cyber-blue mb-6">
@@ -197,7 +198,6 @@ const Contact = () => {
                     />
                   </div>
 
-                  {/* Submit Status */}
                   {submitStatus && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
@@ -239,6 +239,7 @@ const Contact = () => {
                 </form>
               </div>
             </motion.div>
+            */}
 
             {/* Contact Info & Social Links */}
             <motion.div variants={itemVariants} className="space-y-8">
