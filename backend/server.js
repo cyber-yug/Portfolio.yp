@@ -23,45 +23,22 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// CORS configuration with environment-based origin handling
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // In development, allow any origin
-    if (process.env.NODE_ENV === 'development') {
-      return callback(null, true);
-    }
-    
-    // In production, only allow specific domains
-    const allowedOrigins = [
-      'https://portfolioyp-psi.vercel.app',
-      'https://portfolio-ly8cy5uxk-yug-patels-projects-4c4dde5b.vercel.app',
-      'https://portfolio-8m64urms0-yug-patels-projects-4c4dde5b.vercel.app'
-    ];
-    
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`Origin ${origin} not allowed by CORS`));
-    }
-  },
+// CORS configuration - Temporarily allow all origins to fix deployment issues
+app.use(cors({
+  origin: true, // Allow all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: [
     'Content-Type', 
     'Authorization', 
     'Accept', 
     'Origin', 
-    'X-Requested-With'
+    'X-Requested-With',
+    'Access-Control-Allow-Origin'
   ],
-  credentials: true, // Allow cookies/credentials
+  credentials: true,
   preflightContinue: false,
-  optionsSuccessStatus: 200 // For legacy browser support
-};
-
-// Apply CORS middleware
-app.use(cors(corsOptions));
+  optionsSuccessStatus: 200
+}));
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
